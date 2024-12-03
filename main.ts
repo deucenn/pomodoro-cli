@@ -1,66 +1,134 @@
-// Import for input and output in cli
-import readline from "readline";
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+// Import for input and output in CLI
+import inquirer from "inquirer";
+import notifier from "node-notifier";
+import { Bar, Presets } from "cli-progress";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const askQuestion = (query: string): Promise<string> =>
-  new Promise((resolve) => rl.question(query, resolve));
-
 const Pomodoro = async (workTime: number, breakTime: number) => {
-  console.log(`Starting a ${workTime}-minute work timer!`);
+  console.clear();
+
+  console.log(`💻 Starting a ${workTime}-minute work timer!`);
+  notifier.notify({
+    title: "Pomodoro Timer",
+    message: "Work time started!",
+  });
+
+  await sleep(1000);
+
+  console.clear();
+  const workBar = new Bar(
+    {
+      format: "💻 Work Time |{bar}| {value}/{total} minutes left",
+    },
+    Presets.shades_classic
+  );
+  workBar.start(workTime, 0);
+
   for (let i = 0; i < workTime; i++) {
-    console.log(`Work time left: ${workTime - i} minutes`);
-    await sleep(60000); // Simulate 1 minute (for testing, reduce this)
+    await sleep(60000);
+    workBar.update(i + 1);
   }
-  console.log("Work time is up! Time for a break!");
+  workBar.stop();
+
+  console.log("☕ Work time is up! Time for a break!");
+  console.log(`☕ Starting a ${breakTime}-minute work timer!`);
+  notifier.notify({
+    title: "Pomodoro Timer",
+    message: "Break time started!",
+  });
+
+  await sleep(1000);
+
+  console.clear();
+  const breakBar = new Bar(
+    {
+      format: "☕ Break Time |{bar}| {value}/{total} minutes left",
+    },
+    Presets.shades_classic
+  );
+  breakBar.start(breakTime, 0);
 
   for (let i = 0; i < breakTime; i++) {
-    console.log(`Break time left: ${breakTime - i} minutes`);
-    await sleep(60000); // Simulate 1 minute (for testing, reduce this)
+    await sleep(60000);
+    breakBar.update(i + 1);
   }
+  breakBar.stop();
   console.log("Break time is over!");
 
-  const answer = await askQuestion("Do you want to start another session? (yes|no): ");
-  const trimmedAnswer = answer.trim().toLowerCase();
+  await sleep(1000);
 
-  if (trimmedAnswer === "yes") {
-    console.log("Starting a new session!");
+  const { continueSession } = await inquirer.prompt([
+    {
+      type: "list",
+      name: "continueSession",
+      message: "Do you want to continue the session?",
+      choices: ["Yes", "No"],
+    },
+  ]);
+
+  if (continueSession === "Yes") {
+    console.log("Continuing the session!");
     await Pomodoro(workTime, breakTime);
-  } else if (trimmedAnswer === "no") {
-    console.log("Thank you for using the Pomodoro timer! Goodbye!");
-    rl.close();
   } else {
-    console.log("Invalid input. Please enter 'yes' or 'no'.");
-    await Pomodoro(workTime, breakTime); // Retry the same session
+    console.clear();
+    console.log("Thank you for using the Pomodoro timer! Goodbye!");
   }
 };
 
 const main = async () => {
-  const workTimeInput = await askQuestion("How long should the work time be in minutes? ");
-  const breakTimeInput = await askQuestion("How long should the break time be in minutes? ");
+  console.log(`
+    ____                               _         _____ _                     
+   |  _ \\ ___  _ __ ___   ___  _ __ __| | ___   |_   _(_)_ __ ___   ___ _ __ 
+   | |_) / _ \\| '_ \` _ \\ / _ \\| '__/ _\` |/ _ \\    | | | | '_ \` _ \\ / _ \\ '__|
+   |  __/ (_) | | | | | | (_) | | | (_| | (_) |   | | | | | | | | |  __/ |   
+   |_|   \\___/|_| |_| |_|\\___/|_|  \\__,_|\\___/    |_| |_|_| |_| |_|\\___|_|    
+   `);
 
-  const workTimer = parseInt(workTimeInput, 10);
-  const breakTimer = parseInt(breakTimeInput, 10);
+  const { menuChoice } = await inquirer.prompt([
+    {
+      type: "list",
+      name: "menuChoice",
+      message: "Welcome to my Pomodoro Timer",
+      choices: ["Start", "Settings", "Exit"],
+    },
+  ]);
 
-  if (
-    isNaN(workTimer) ||
-    isNaN(breakTimer) ||
-    workTimer < 1 ||
-    breakTimer < 1
-  ) {
-    console.error(
-      "Invalid input. Please restart and enter positive integers for work and break times."
-    );
-    rl.close();
-  } else {
+  if (menuChoice === "Start") {
+    console.log("Starting the session!");
+    await Pomodoro(25, 5);
+  } else if (menuChoice === "Settings") {
+    const answers = await inquirer.prompt([
+      {
+        type: "input",
+        name: "workTime",
+        message: "How long should the work time be in minutes?",
+        validate: (input: string) =>
+          parseInt(input, 10) > 0
+            ? true
+            : "Please enter a positive integer greater than 0.",
+      },
+      {
+        type: "input",
+        name: "breakTime",
+        message: "How long should the break time be in minutes?",
+        validate: (input: string) =>
+          parseInt(input, 10) > 0
+            ? true
+            : "Please enter a positive integer greater than 0.",
+      },
+    ]);
+
+    const workTimer = parseInt(answers.workTime, 10);
+    const breakTimer = parseInt(answers.breakTime, 10);
+
     await Pomodoro(workTimer, breakTimer);
+  } else if (menuChoice === "Exit") {
+    console.clear();
+    console.log("Thank you for using the Pomodoro timer! Goodbye!");
   }
 };
 
 main();
 
+// TODO: Adding color and emojis
