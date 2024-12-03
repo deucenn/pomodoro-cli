@@ -11,7 +11,7 @@ const Pomodoro = async (workTime: number, breakTime: number) => {
   console.log(`💻 Starting a ${workTime}-minute work timer!`);
   notifier.notify({
     title: "Pomodoro Timer",
-    message: "Work time started!",
+    message: "💻Work time started!💻",
   });
 
   await sleep(1000);
@@ -19,7 +19,7 @@ const Pomodoro = async (workTime: number, breakTime: number) => {
   console.clear();
   const workBar = new Bar(
     {
-      format: "💻 Work Time |{bar}| {value}/{total} minutes left",
+      format: '💻 Work Time |{bar}| {value}/{total} minutes left',
     },
     Presets.shades_classic
   );
@@ -32,10 +32,12 @@ const Pomodoro = async (workTime: number, breakTime: number) => {
   workBar.stop();
 
   console.log("☕ Work time is up! Time for a break!");
+  await sleep(1000);
+
   console.log(`☕ Starting a ${breakTime}-minute work timer!`);
   notifier.notify({
     title: "Pomodoro Timer",
-    message: "Break time started!",
+    message: "☕Break time started!☕",
   });
 
   await sleep(1000);
@@ -43,7 +45,7 @@ const Pomodoro = async (workTime: number, breakTime: number) => {
   console.clear();
   const breakBar = new Bar(
     {
-      format: "☕ Break Time |{bar}| {value}/{total} minutes left",
+      format: '💤 Break Time |{bar}| {value}/{total} minutes left',
     },
     Presets.shades_classic
   );
@@ -69,14 +71,16 @@ const Pomodoro = async (workTime: number, breakTime: number) => {
 
   if (continueSession === "Yes") {
     console.log("Continuing the session!");
+    await sleep(1000);
     await Pomodoro(workTime, breakTime);
   } else {
     console.clear();
-    console.log("Thank you for using the Pomodoro timer! Goodbye!");
+    main();
   }
 };
 
 const main = async () => {
+  console.clear();
   console.log(`
     ____                               _         _____ _                     
    |  _ \\ ___  _ __ ___   ___  _ __ __| | ___   |_   _(_)_ __ ___   ___ _ __ 
