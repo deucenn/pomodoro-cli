@@ -135,4 +135,3 @@ const main = async () => {
 
 main();
 
-// TODO: Adding color and emojis
