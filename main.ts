@@ -107,6 +107,7 @@ const main = async () => {
         type: "input",
         name: "workTime",
         message: "How long should the work time be in minutes?",
+        default: "25",
         validate: (input: string) =>
           parseInt(input, 10) > 0
             ? true
@@ -116,6 +117,7 @@ const main = async () => {
         type: "input",
         name: "breakTime",
         message: "How long should the break time be in minutes?",
+        default: "5",
         validate: (input: string) =>
           parseInt(input, 10) > 0
             ? true
