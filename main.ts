@@ -9,7 +9,7 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const Pomodoro = async (workTime: number, breakTime: number) => {
   console.clear();
 
-  console.log(`💻 Starting a ${workTime}-minute work timer!`.blue);
+  console.log(`💻 Starting a ${workTime}-minute work timer!`.cyan);
   notifier.notify({
     title: "Pomodoro Timer",
     message: "💻Work time started!💻",
@@ -20,7 +20,7 @@ const Pomodoro = async (workTime: number, breakTime: number) => {
   console.clear();
   const workBar = new Bar(
     {
-      format: '💻 Work Time |{bar}| {value}/{total} minutes left'.blue,
+      format: '💻 Work Time |{bar}| {value}/{total} minutes left'.cyan,
     },
     Presets.shades_classic
   );
