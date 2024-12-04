@@ -2,6 +2,8 @@
 
 A simple Pomodoro timer CLI application built with TypeScript that helps you manage your work and break sessions. The app notifies you when work or break time starts and updates progress with a visual progress bar.
 
+![cli-typer demo gif](demo.gif)
+
 ## Features
 
 - **Work Timer**: A timer that helps you focus on tasks for a specific duration (default: 25 minutes).

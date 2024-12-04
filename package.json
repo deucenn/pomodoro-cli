@@ -1,8 +1,11 @@
 {
-  "name": "pomodoro-cli",
+  "name": "pomotask-cli",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple Pomodoro timer CLI app",
   "main": "main.ts",
+  "bin": {
+    "pomodoro-cli": "./dist/main.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node main.ts"
