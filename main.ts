@@ -58,6 +58,10 @@ const Pomodoro = async (workTime: number, breakTime: number) => {
   }
   breakBar.stop();
   console.log("Break time is over!".magenta);
+  notifier.notify({
+    title: "Pomodoro Timer",
+    message: "💻Do you want to continue?💻",
+  })
 
   await sleep(1000);
 
