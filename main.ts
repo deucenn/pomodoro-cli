@@ -1,6 +1,7 @@
 // Import for input and output in CLI
 import inquirer from "inquirer";
 import notifier from "node-notifier";
+import figlet from "figlet";
 import { Bar, Presets } from "cli-progress";
 import "colors";
 
@@ -20,7 +21,7 @@ const Pomodoro = async (workTime: number, breakTime: number) => {
   console.clear();
   const workBar = new Bar(
     {
-      format: '💻 Work Time |{bar}| {value}/{total} minutes left'.cyan,
+      format: "💻 Work Time |{bar}| {value}/{total} minutes left".cyan,
     },
     Presets.shades_classic
   );
@@ -46,7 +47,7 @@ const Pomodoro = async (workTime: number, breakTime: number) => {
   console.clear();
   const breakBar = new Bar(
     {
-      format: '💤 Break Time |{bar}| {value}/{total} minutes left'.green,
+      format: "💤 Break Time |{bar}| {value}/{total} minutes left".green,
     },
     Presets.shades_classic
   );
@@ -61,7 +62,7 @@ const Pomodoro = async (workTime: number, breakTime: number) => {
   notifier.notify({
     title: "Pomodoro Timer",
     message: "💻Do you want to continue?💻",
-  })
+  });
 
   await sleep(1000);
 
@@ -86,13 +87,21 @@ const Pomodoro = async (workTime: number, breakTime: number) => {
 
 const main = async () => {
   console.clear();
-  console.log(`
-    ____                               _         _____ _                     
-   |  _ \\ ___  _ __ ___   ___  _ __ __| | ___   |_   _(_)_ __ ___   ___ _ __ 
-   | |_) / _ \\| '_ \` _ \\ / _ \\| '__/ _\` |/ _ \\    | | | | '_ \` _ \\ / _ \\ '__|
-   |  __/ (_) | | | | | | (_) | | | (_| | (_) |   | | | | | | | | |  __/ |   
-   |_|   \\___/|_| |_| |_|\\___/|_|  \\__,_|\\___/    |_| |_|_| |_| |_|\\___|_|    
-   `.blue);
+
+  const banner = figlet.textSync("Pomodoro CLI", {
+    font: "Speed", 
+    horizontalLayout: "default",
+    verticalLayout: "default",
+  });
+
+  const goodBye = figlet.textSync("Goodbye", {
+    font: "Slant",
+    horizontalLayout: "default",
+    verticalLayout: "default",
+  })
+
+  console.log(banner.cyan);
+  console.log("\nWelcome to your productivity timer!\n");
 
   const { menuChoice } = await inquirer.prompt([
     {
@@ -137,9 +146,9 @@ const main = async () => {
   } else if (menuChoice === "Exit".red) {
     console.clear();
     console.log("Thank you for using the Pomodoro timer! Goodbye!".red.dim);
+    console.log(goodBye.red.dim)
     await sleep(1000);
   }
 };
 
 main();
-
