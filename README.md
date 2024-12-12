@@ -44,6 +44,8 @@ npx ts-node main.ts
 - [inquirer](https://www.npmjs.com/package/inquirer): For handling user prompts in the command-line interface.
 - [node-notifier](https://www.npmjs.com/package/node-notifier): To show desktop notifications.
 - [cli-progress](https://www.npmjs.com/package/cli-progress): For displaying progress bars in the terminal.
+- [figlet](https://www.npmjs.com/package/figlet): For generating ASCII art text in the terminal.
+
 
 ## Contributing
 
